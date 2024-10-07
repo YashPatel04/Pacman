@@ -13,10 +13,13 @@ find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 include_directories(
         ${SFML_INCLUDE_DIR}
         ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/assets
 )
 
 # Add executable
-add_executable(PacMan src/main.cpp)
+add_executable(PacMan src/main.cpp
+        src/Map.cpp
+        src/MapConverter.cpp)
 
 # Link SFML libraries
 target_link_libraries(PacMan sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
