@@ -7,6 +7,8 @@
 #include "Map.h"
 #include "MapConverter.h"
 #include "Global.h"
+#include "collision.h"
+#include "Pacman.h"
 using namespace std;
 
 int main(){
@@ -33,7 +35,8 @@ int main(){
             " #.................# ",
             " ################### "
     };
-    std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> map = convert_sketch(map_sketch);
+    Pacman pacman;
+    std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> map = convert_sketch(map_sketch, pacman);
     sf::RenderWindow window(sf::VideoMode(CELL_SIZE * MAP_WIDTH * SCREEN_RESIZE, (FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT) * SCREEN_RESIZE), "Pac-Man", sf::Style::Close);
     window.setView(sf::View(sf::FloatRect(0, 0, CELL_SIZE * MAP_WIDTH, FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT)));
     window.setFramerateLimit(60);
@@ -47,6 +50,10 @@ int main(){
         }
         window.clear();
         draw_map(map, window);
+        //*************TO DO: make pacman smoother on turns********************
+        pacman.update(0, map);
+        pacman.draw(0, window);
+
         window.display();
     }
     return 0;

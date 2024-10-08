@@ -3,7 +3,7 @@
 #include <array>
 #include <SFML/Graphics.hpp>
 #include <iostream>
-std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::array<std::string, MAP_HEIGHT>& i_map_sketch){
+std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::array<std::string, MAP_HEIGHT>& i_map_sketch, Pacman& i_pacman){
     //pacman and ghost work remaining
     std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> output_map{};
 
@@ -27,6 +27,10 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::ar
                 }
                 case 'o':{
                     output_map[b][a]=Cell::Energizer;
+                    break;
+                }
+                case 'P':{
+                    i_pacman.set_position(CELL_SIZE * b, CELL_SIZE * a);
                     break;
                 }
                 default:{
