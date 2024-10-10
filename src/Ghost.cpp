@@ -193,36 +193,34 @@ void Ghost::update(unsigned char i_level, std::array<std::array<Cell, MAP_HEIGHT
             }
         }
     }
-    else{
-        unsigned char random_direction = rand() % 4 ;
-        if(0 == frightened_speed_timer){
+    else {
+        unsigned char random_direction = rand() % 4;
+        if (0 == frightened_speed_timer) {
             //the ghost can move after certain number of frames
             move = 1;
             frightened_speed_timer = GHOST_FRIGHTENED_SPEED;
-            for(unsigned  char a = 0; a<4; a++){
+            for (unsigned char a = 0; a < 4; a++) {
                 //they cant turn back even if they are frightened
-                if (a == (2 + direction) % 4){
+                if (a == (2 + direction) % 4) {
                     continue;
-                }
-                else if(0==walls[a]){
+                } else if (0 == walls[a]) {
                     available_ways++;
                 }
             }
-            if(available_ways>0){
-                while(1==walls[random_direction] || random_direction == (2+direction)%4){
+            if (available_ways > 0) {
+                while (1 == walls[random_direction] || random_direction == (2 + direction) % 4) {
                     //We keep picking a random direction until we can use it and we don't want our ghost to move back, for now atleast
-                    random_direction = rand()%4;
+                    random_direction = rand() % 4;
                 }
                 direction = random_direction;
-            }
-            else{
+            } else {
                 //If there's no other way, it turns back.
                 direction = (2 + direction) % 4;
             }
-        }
-        else{
+        } else {
             frightened_speed_timer--;
         }
+    }
         //if ghost can move we move it
         if(move == 1){
             switch (direction){
@@ -261,8 +259,8 @@ void Ghost::update(unsigned char i_level, std::array<std::array<Cell, MAP_HEIGHT
                 target = home;
             }
         }
-    }
 }
+
 
 void Ghost::update_target(unsigned char i_pacman_direction, const Position &i_ghost_0_position,
                           const Position &i_pacman_position) {

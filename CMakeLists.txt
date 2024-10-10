@@ -22,7 +22,8 @@ add_executable(PacMan src/main.cpp
         src/MapConverter.cpp
         src/Pacman.cpp
         src/collision.cpp
-        src/Ghost.cpp)
+        src/Ghost.cpp
+        src/GhostManager.cpp)
 
 # Link SFML libraries
 target_link_libraries(PacMan sfml-system sfml-window sfml-graphics sfml-network sfml-audio)

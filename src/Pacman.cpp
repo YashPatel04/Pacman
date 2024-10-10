@@ -49,7 +49,11 @@ void Pacman::set_animation_timer(unsigned short i_animation_timer){
     animation_timer = i_animation_timer;
 }
 void Pacman::set_dead(bool i_dead){
-    //later
+    dead = i_dead;
+    if (1 == dead){
+        //Making sure that the animation starts from the beginning.
+        animation_timer = 0;
+    }
 }
 void Pacman::set_position(short i_x, short i_y){
     position = {i_x, i_y};
