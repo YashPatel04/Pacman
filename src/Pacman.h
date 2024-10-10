@@ -20,6 +20,7 @@ public:
 
     unsigned char get_direction();
     unsigned short get_energizer_timer();
+    unsigned short get_animation_timer();
 
     void draw(bool i_victory, sf::RenderWindow& i_window);
     void reset();

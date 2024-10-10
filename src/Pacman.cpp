@@ -25,18 +25,35 @@ unsigned char Pacman::get_direction(){
 unsigned short Pacman::get_energizer_timer(){
     return energizer_timer;
 }
+unsigned short Pacman::get_animation_timer(){
+    return animation_timer;
+}
 void Pacman::draw(bool i_victory, sf::RenderWindow& i_window){
     unsigned char frame = static_cast<unsigned char>(floor(animation_timer / static_cast<float>(PACMAN_ANIMATION_SPEED)));
     sf::Sprite sprite;
     sf::Texture texture;
 
     sprite.setPosition(position.x, position.y);
-   //later
-    texture.loadFromFile("../assets/Pacman16.png");
-    sprite.setTexture(texture);
-    sprite.setTextureRect(sf::IntRect(CELL_SIZE * frame, CELL_SIZE * direction, CELL_SIZE, CELL_SIZE));
-    i_window.draw(sprite);
-    animation_timer = (1 + animation_timer) % (PACMAN_ANIMATION_FRAMES * PACMAN_ANIMATION_SPEED);
+    if (1 == dead || 1 == i_victory){
+        if (animation_timer < PACMAN_DEATH_FRAMES * PACMAN_ANIMATION_SPEED){
+            animation_timer++;
+            texture.loadFromFile("../assets/PacmanDeath16.png");
+            sprite.setTexture(texture);
+            sprite.setTextureRect(sf::IntRect(CELL_SIZE * frame, 0, CELL_SIZE, CELL_SIZE));
+            i_window.draw(sprite);
+        }
+        else{
+            //You can only die once.
+            animation_over = 1;
+        }
+    }
+    else{
+        texture.loadFromFile("../assets/Pacman16.png");
+        sprite.setTexture(texture);
+        sprite.setTextureRect(sf::IntRect(CELL_SIZE * frame, CELL_SIZE * direction, CELL_SIZE, CELL_SIZE));
+        i_window.draw(sprite);
+        animation_timer = (1 + animation_timer) % (PACMAN_ANIMATION_FRAMES * PACMAN_ANIMATION_SPEED);
+    }
 }
 void Pacman::reset(){
     animation_over = 0;

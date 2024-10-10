@@ -38,7 +38,7 @@ int main(){
             " ################### "
     };
     bool game_won = 0;
-    bool set_dead = 0;
+    unsigned char level = 0;
     Pacman pacman;
     GhostManager ghostManager;
     std::array<Position, 4> ghost_positions{};
@@ -46,27 +46,83 @@ int main(){
     sf::RenderWindow window(sf::VideoMode(CELL_SIZE * MAP_WIDTH * SCREEN_RESIZE, (FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT) * SCREEN_RESIZE), "Pac-Man", sf::Style::Close);
     window.setView(sf::View(sf::FloatRect(0, 0, CELL_SIZE * MAP_WIDTH, FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT)));
     window.setFramerateLimit(60);
-    ghostManager.reset(0, ghost_positions);
+    ghostManager.reset(level, ghost_positions);
+    bool move = 0;
     while(window.isOpen()){
         sf::Event event;
         while(window.pollEvent(event)) {
-            if(event.type == sf::Event::KeyPressed){
-                set_dead = 1;
-            }
             if (event.type == sf::Event::Closed) {
                 window.close();
+            }
+        }
+        if (move == 0){
+            map = convert_sketch(map_sketch,ghost_positions,pacman);
+            pacman.reset();
+            ghostManager.reset(level, ghost_positions);
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+                move = 1;
             }
         }
         window.clear();
         draw_map(map, window);
         //*************TO DO: make pacman smoother on turns********************
-        if(set_dead){
-            pacman.update(0, map);
-            ghostManager.update(0,map,pacman);
-        }
-        pacman.draw(0, window);
-        ghostManager.draw(0,window);
+        //*** GAME LOGIC ***
+        //if game not won and pacman dead {level remain the same ; lives--)
+        //if game won and pacman not dead {level ++;}
+        //else just keep playing
+        if(move){
+            if (!game_won && pacman.get_dead()) {
+                // Reset the animation timer only when Pac-Man first dies
+                if (pacman.get_animation_over() == 0 && pacman.get_animation_timer() == 0) {
+                    pacman.set_animation_timer(1); // Start the death animation
+                }
+                // Draw the death animation
+                draw_map(map, window);
+                pacman.draw(1, window);
+                // Check if the animation has completed
+                if (pacman.get_animation_over()) {
+                    // Animation has finished, now stop the game logic and reset
+                    move = 0;
+                }
 
+            } else if (game_won && !pacman.get_dead()) {
+                if (pacman.get_animation_over() == 0 && pacman.get_animation_timer() == 0) {
+                    pacman.set_animation_timer(1);
+                }
+                draw_map(map, window);
+                pacman.draw(1, window);
+
+                if (pacman.get_animation_over()) {
+                    move = 0;
+                }
+            } else if (!game_won && !pacman.get_dead()) {
+                draw_map(map, window);
+                pacman.draw(game_won, window);
+                ghostManager.draw(GHOST_FLASH_START >= pacman.get_energizer_timer(), window);
+                pacman.update(level, map);
+                ghostManager.update(level, map, pacman);
+                //how to win the game
+                for (const std::array<Cell, MAP_HEIGHT>& column : map){
+                    for (const Cell& cell : column){
+                        game_won = 1;
+                        if (Cell::Pellet == cell){
+                            game_won = 0; //The game is not yet won.
+                            break;
+                        }
+                    }
+                    if (0 == game_won){
+                        break;
+                    }
+                }
+            }
+        }
+        else{ //This is for when we are waiting for player to press enter and start playing
+            pacman.draw(0,window);
+            ghostManager.draw(0,window);
+            pacman.update(level,map);
+            ghostManager.update(level,map,pacman);
+
+        }
         window.display();
     }
     return 0;
