@@ -38,7 +38,7 @@ bool collision(bool i_collect_pellets, bool i_use_door, short i_x, short i_y, st
         //make sure that the position is inside of the map
         if(0<=x && 0<=y && MAP_HEIGHT>y && MAP_WIDTH > x){
             //We are just checking for walls here
-            if(!i_collect_pellets){
+            if(0==i_collect_pellets){
                 if(Cell::Wall == i_map[x][y]){
                     output = 1;
                 }

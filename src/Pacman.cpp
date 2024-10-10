@@ -105,7 +105,12 @@ void Pacman::update(unsigned char i_level, std::array<std::array<Cell, MAP_HEIGH
     } else if (CELL_SIZE * MAP_WIDTH <= position.x) {
         position.x = PACMAN_SPEED - CELL_SIZE;
     }
-    //add energizer code
+    if(collision(1,0, position.x, position.y, i_map)){
+        energizer_timer = static_cast<unsigned short>(ENERGIZER_DURATION / pow(2, i_level));
+    }
+    else{
+        energizer_timer = std::max(0, energizer_timer - 1);
+    }
 }
 Position Pacman::get_position()
 {

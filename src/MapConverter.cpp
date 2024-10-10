@@ -3,7 +3,7 @@
 #include <array>
 #include <SFML/Graphics.hpp>
 #include <iostream>
-std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::array<std::string, MAP_HEIGHT>& i_map_sketch, Pacman& i_pacman){
+std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::array<std::string, MAP_HEIGHT>& i_map_sketch,std::array<Position,4>& i_ghost_positions, Pacman& i_pacman){
     //pacman and ghost work remaining
     std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> output_map{};
 
@@ -27,6 +27,30 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(const std::ar
                 }
                 case 'o':{
                     output_map[b][a]=Cell::Energizer;
+                    break;
+                }
+                //Red ghost
+                case '0':{
+                    i_ghost_positions[0].x = CELL_SIZE * b;
+                    i_ghost_positions[0].y = CELL_SIZE * a;
+                    break;
+                }
+                //Pink ghost
+                case '1':{
+                    i_ghost_positions[1].x = CELL_SIZE * b;
+                    i_ghost_positions[1].y = CELL_SIZE * a;
+                    break;
+                }
+                //Blue (cyan) ghost
+                case '2':{
+                    i_ghost_positions[2].x = CELL_SIZE * b;
+                    i_ghost_positions[2].y = CELL_SIZE * a;
+                    break;
+                }
+                //Orange ghost
+                case '3':{
+                    i_ghost_positions[3].x = CELL_SIZE * b;
+                    i_ghost_positions[3].y = CELL_SIZE * a;
                     break;
                 }
                 case 'P':{
