@@ -64,7 +64,7 @@ void Ghost::draw(bool i_flash, sf::RenderWindow &i_window) {
     face.setPosition(position.x, position.y);
 
     // "I'm not frightened" look
-    if(!frightened_mode){
+    if(0==frightened_mode){
         switch(id){
             case 0:{
                 //red
@@ -89,12 +89,12 @@ void Ghost::draw(bool i_flash, sf::RenderWindow &i_window) {
         face.setTextureRect(sf::IntRect(CELL_SIZE * direction, CELL_SIZE, CELL_SIZE, CELL_SIZE));
         i_window.draw(body);
     }
-    else if(frightened_mode){
+    else if(1==frightened_mode){
         //color and face of ghosts remain the same because pacman ate the energizer
         body.setColor(sf::Color(36,36,255));
         face.setTextureRect(sf::IntRect (4*CELL_SIZE,CELL_SIZE,CELL_SIZE,CELL_SIZE));
 
-        if(i_flash && body_frame%2 == 0){
+        if(i_flash == 1 && body_frame%2 == 0){
             body.setColor(sf::Color(255,255,0));
             face.setColor(sf::Color(255,0,0));
         }else{

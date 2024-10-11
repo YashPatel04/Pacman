@@ -75,7 +75,7 @@ void Pacman::set_dead(bool i_dead){
 void Pacman::set_position(short i_x, short i_y){
     position = {i_x, i_y};
 }
-void Pacman::update(unsigned char i_level, std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map){
+void Pacman::update(unsigned short i_level, std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map){
     std::array<bool, 4> walls{};
     walls[0] = collision(0, 0, PACMAN_SPEED + position.x, position.y, i_map);
     walls[1] = collision(0, 0, position.x, position.y - PACMAN_SPEED, i_map);
@@ -126,8 +126,15 @@ void Pacman::update(unsigned char i_level, std::array<std::array<Cell, MAP_HEIGH
     } else if (CELL_SIZE * MAP_WIDTH <= position.x) {
         position.x = PACMAN_SPEED - CELL_SIZE;
     }
-    if(collision(1,0, position.x, position.y, i_map)){
+    if(collision(1,0, position.x, position.y, i_map) == 1){
+        std::cout << "Collision detected!" << std::endl; // Debugging output
+        std::cout << "Energizer Duration: " << ENERGIZER_DURATION << ", Level: " << i_level << std::endl;
+
         energizer_timer = static_cast<unsigned short>(ENERGIZER_DURATION / pow(2, i_level));
+
+        // Confirm energizer timer is set
+        std::cout << "Energizer timer set to: " << energizer_timer << std::endl;
+
     }
     else{
         energizer_timer = std::max(0, energizer_timer - 1);

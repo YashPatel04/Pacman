@@ -1,5 +1,6 @@
 #include <array>
 #include <cmath>
+#include <iostream>
 #include "Global.h"
 #include "collision.h"
 

@@ -11,6 +11,7 @@
 #include "Pacman.h"
 #include "Ghost.h"
 #include "GhostManager.h"
+#include "Text.h"
 using namespace std;
 
 int main(){
@@ -38,7 +39,7 @@ int main(){
             " ################### "
     };
     bool game_won = 0;
-    unsigned char level = 0;
+    unsigned short level = 0;
     Pacman pacman;
     GhostManager ghostManager;
     std::array<Position, 4> ghost_positions{};
@@ -48,8 +49,10 @@ int main(){
     window.setFramerateLimit(60);
     ghostManager.reset(level, ghost_positions);
     bool move = 0;
+    int lives = 3;
     while(window.isOpen()){
         sf::Event event;
+
         while(window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
@@ -65,7 +68,7 @@ int main(){
         }
         window.clear();
         draw_map(map, window);
-        //*************TO DO: make pacman smoother on turns********************
+        draw_text(0, 0, 335, "Lives: " + std::to_string(lives) + ", Level: " + std::to_string(level), window);        //*************TO DO: make pacman smoother on turns********************
         //*** GAME LOGIC ***
         //if game not won and pacman dead {level remain the same ; lives--)
         //if game won and pacman not dead {level ++;}
@@ -99,6 +102,7 @@ int main(){
                 draw_map(map, window);
                 pacman.draw(game_won, window);
                 ghostManager.draw(GHOST_FLASH_START >= pacman.get_energizer_timer(), window);
+
                 pacman.update(level, map);
                 ghostManager.update(level, map, pacman);
                 //how to win the game
