@@ -62,12 +62,12 @@ int main(){
             map = convert_sketch(map_sketch,ghost_positions,pacman);
             pacman.reset();
             ghostManager.reset(level, ghost_positions);
+
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
                 move = 1;
             }
         }
         window.clear();
-        draw_map(map, window);
         draw_text(0, 0, 335, "Lives: " + std::to_string(lives) + ", Level: " + std::to_string(level), window);        //*************TO DO: make pacman smoother on turns********************
         //*** GAME LOGIC ***
         //if game not won and pacman dead {level remain the same ; lives--)
@@ -80,7 +80,8 @@ int main(){
                     pacman.set_animation_timer(1); // Start the death animation
                 }
                 // Draw the death animation
-                draw_map(map, window);
+                draw_text(1,250,250,"GAME OVER",window);
+
                 pacman.draw(1, window);
                 // Check if the animation has completed
                 if (pacman.get_animation_over()) {
@@ -94,7 +95,7 @@ int main(){
                 }
                 draw_map(map, window);
                 pacman.draw(1, window);
-
+                draw_text(1,250,250,"YOU WON",window);
                 if (pacman.get_animation_over()) {
                     move = 0;
                 }
@@ -121,6 +122,8 @@ int main(){
             }
         }
         else{ //This is for when we are waiting for player to press enter and start playing
+            draw_map(map, window);
+
             pacman.draw(0,window);
             ghostManager.draw(0,window);
             pacman.update(level,map);

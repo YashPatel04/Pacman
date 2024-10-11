@@ -256,7 +256,8 @@ void Ghost::update(unsigned char i_level, std::array<std::array<Cell, MAP_HEIGHT
             else{ //Otherwise, the ghost starts running towards the house.
                 use_door = 1;
                 frightened_mode = 2;
-                target = home;
+                Position temp = {160,144};
+                target = temp;
             }
         }
 }
@@ -264,6 +265,7 @@ void Ghost::update(unsigned char i_level, std::array<std::array<Cell, MAP_HEIGHT
 
 void Ghost::update_target(unsigned char i_pacman_direction, const Position &i_ghost_0_position,
                           const Position &i_pacman_position) {
+
     if(1==use_door){//if the ghost can use the door
         if(position == target){
             if(home_exit == target){// if the ghost has reached the exit it can no longer use the door
