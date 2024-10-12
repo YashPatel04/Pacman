@@ -39,7 +39,7 @@ int main(){
             " ################### "
     };
     bool game_won = 0;
-    unsigned short level = 0;
+    unsigned short level = 1;
     Pacman pacman;
     GhostManager ghostManager;
     std::array<Position, 4> ghost_positions{};
@@ -48,6 +48,9 @@ int main(){
     window.setView(sf::View(sf::FloatRect(0, 0, CELL_SIZE * MAP_WIDTH, FONT_HEIGHT + CELL_SIZE * MAP_HEIGHT)));
     window.setFramerateLimit(60);
     ghostManager.reset(level, ghost_positions);
+    sf::Image icon;
+    icon.loadFromFile("../assets/icon.png");
+    window.setIcon(24, 24, icon.getPixelsPtr());
     bool move = 0;
     unsigned short LOSE_FRAME = 0;
     unsigned short lives = 3;
