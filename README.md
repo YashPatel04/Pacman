@@ -1,6 +1,6 @@
 # PacMan Game 
 ![img.png](img.png)
-![img_1.png](img_1.png)
+
 This is a C++ implementation of the classic PacMan game using the SFML library. The game includes features such as ghost AI, collision detection, and game state management.
 
 ## Motivation
