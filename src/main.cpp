@@ -49,7 +49,9 @@ int main(){
     window.setFramerateLimit(60);
     ghostManager.reset(level, ghost_positions);
     bool move = 0;
-    int lives = 3;
+    unsigned short LOSE_FRAME = 0;
+    unsigned short lives = 3;
+    unsigned short wins = 3;
     while(window.isOpen()){
         sf::Event event;
 
@@ -59,13 +61,25 @@ int main(){
             }
         }
         if (move == 0){
-            map = convert_sketch(map_sketch,ghost_positions,pacman);
-            pacman.reset();
-            ghostManager.reset(level, ghost_positions);
-
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
-                move = 1;
+            // Inside the main loop
+            if (lives == 0) {
+                if (LOSE_FRAME > 600) {  // Display the message for 10 seconds (at 60 FPS)
+                    lives = 3;  // Reset lives
+                    LOSE_FRAME = 0;  // Reset the counter
+                    move = 0;  // Wait for player to press Enter again
+                }
+            }else{
+                map = convert_sketch(map_sketch,ghost_positions,pacman);
+                pacman.reset();
+                ghostManager.reset(level, ghost_positions);
+                if(game_won == 1){
+                    game_won==0;
+                }
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+                    move = 1;
+                }
             }
+
         }
         window.clear();
         draw_text(0, 0, 335, "Lives: " + std::to_string(lives) + ", Level: " + std::to_string(level), window);        //*************TO DO: make pacman smoother on turns********************
@@ -73,11 +87,20 @@ int main(){
         //if game not won and pacman dead {level remain the same ; lives--)
         //if game won and pacman not dead {level ++;}
         //else just keep playing
-        if(move){
+        if (lives == 0) {
+            draw_text(1, 250, 250, "YOU LOSE!", window);
+            LOSE_FRAME++;
+            if (LOSE_FRAME > 180) {
+                lives = 3;  // Reset lives
+                LOSE_FRAME = 0;  // Reset the counter
+                move = 0;  // Wait for player to press Enter again
+            }
+        }
+        else if(move){
             if (!game_won && pacman.get_dead()) {
                 // Reset the animation timer only when Pac-Man first dies
                 if (pacman.get_animation_over() == 0 && pacman.get_animation_timer() == 0) {
-                    pacman.set_animation_timer(1); // Start the death animation
+                    pacman.set_animation_timer(1, lives); // Start the death animation
                 }
                 // Draw the death animation
                 draw_text(1,250,250,"GAME OVER",window);
@@ -91,13 +114,13 @@ int main(){
 
             } else if (game_won && !pacman.get_dead()) {
                 if (pacman.get_animation_over() == 0 && pacman.get_animation_timer() == 0) {
-                    pacman.set_animation_timer(1);
+                    pacman.set_animation_timer(1,wins);
                 }
-                draw_map(map, window);
                 pacman.draw(1, window);
                 draw_text(1,250,250,"YOU WON",window);
                 if (pacman.get_animation_over()) {
                     move = 0;
+                    game_won = 0;
                 }
             } else if (!game_won && !pacman.get_dead()) {
                 draw_map(map, window);

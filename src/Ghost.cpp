@@ -9,6 +9,9 @@
 #include "Pacman.h"
 #include "collision.h"
 #include "Ghost.h"
+#include <limits>
+#include <queue>
+#include <tuple>
 
 Ghost::Ghost(unsigned char i_id):id(i_id){
 
@@ -45,7 +48,7 @@ float Ghost::get_target_distance(unsigned char i_direction) {
         }
     }
     //Now using the good'ol distance formula
-    return static_cast<float>(sqrt(pow(x-target.x,2)-pow(y-target.y,2)));
+    return static_cast<float>(sqrt(pow(x-target.x,2)+pow(y-target.y,2)));
 }
 void Ghost::draw(bool i_flash, sf::RenderWindow &i_window) {
     //current frame of the animation
@@ -221,45 +224,45 @@ void Ghost::update(unsigned char i_level, std::array<std::array<Cell, MAP_HEIGHT
             frightened_speed_timer--;
         }
     }
-        //if ghost can move we move it
-        if(move == 1){
-            switch (direction){
-                case 0:{
-                    position.x += speed;
-                    break;
-                }
-                case 1:{
-                    position.y -= speed;
-                    break;
-                }
-                case 2:{
-                    position.x -= speed;
-                    break;
-                }
-                case 3:{
-                    position.y += speed;
-                }
+    //if ghost can move we move it
+    if(move == 1){
+        switch (direction){
+            case 0:{
+                position.x += speed;
+                break;
             }
-            //warping.
-            //when ghost leaves the map we move it to the other side
-            if (-CELL_SIZE >= position.x){
-                position.x = CELL_SIZE * MAP_WIDTH - speed;
+            case 1:{
+                position.y -= speed;
+                break;
             }
-            else if (position.x >= CELL_SIZE * MAP_WIDTH){
-                position.x = speed - CELL_SIZE;
+            case 2:{
+                position.x -= speed;
+                break;
+            }
+            case 3:{
+                position.y += speed;
             }
         }
-        if (1 == pacman_collision(i_pacman.get_position())){
-            if (0 == frightened_mode){//When the ghost is not frightened and collides with Pacman, we kill Pacman.
-                i_pacman.set_dead(1);
-            }
-            else{ //Otherwise, the ghost starts running towards the house.
-                use_door = 1;
-                frightened_mode = 2;
-                Position temp = {160,144};
-                target = temp;
-            }
+        //warping.
+        //when ghost leaves the map we move it to the other side
+        if (-CELL_SIZE >= position.x){
+            position.x = CELL_SIZE * MAP_WIDTH - speed;
         }
+        else if (position.x >= CELL_SIZE * MAP_WIDTH){
+            position.x = speed - CELL_SIZE;
+        }
+    }
+    if (1 == pacman_collision(i_pacman.get_position())){
+        if (0 == frightened_mode){//When the ghost is not frightened and collides with Pacman, we kill Pacman.
+            i_pacman.set_dead(1);
+        }
+        else{ //Otherwise, the ghost starts running towards the house.
+            use_door = 1;
+            frightened_mode = 2;
+            Position temp = {160,144};
+            target = temp;
+        }
+    }
 }
 
 
@@ -326,7 +329,7 @@ void Ghost::update_target(unsigned char i_pacman_direction, const Position &i_gh
                     break;
                 }
                 case 2:{// The blue ghost will send a vector from the red ghost to the second cell in front of pacman
-                        // then it will double that vector and follow that
+                    // then it will double that vector and follow that
                     target = i_pacman_position;
 
                     //getting the second cell in front of pacman
@@ -368,4 +371,3 @@ void Ghost::update_target(unsigned char i_pacman_direction, const Position &i_gh
 Position Ghost::get_position(){
     return position;
 }
-

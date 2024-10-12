@@ -62,8 +62,9 @@ void Pacman::reset(){
     animation_timer = 0;
     energizer_timer = 0;
 }
-void Pacman::set_animation_timer(unsigned short i_animation_timer){
+void Pacman::set_animation_timer(unsigned short i_animation_timer, unsigned short& lives){
     animation_timer = i_animation_timer;
+    lives--;
 }
 void Pacman::set_dead(bool i_dead){
     dead = i_dead;

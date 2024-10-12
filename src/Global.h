@@ -28,7 +28,7 @@ constexpr unsigned char MAP_HEIGHT = 21;
 constexpr unsigned char MAP_WIDTH = 21;
 constexpr unsigned char PACMAN_ANIMATION_FRAMES = 6;
 constexpr unsigned char PACMAN_ANIMATION_SPEED = 4;
-constexpr unsigned char PACMAN_DEATH_FRAMES = 12;
+constexpr unsigned char PACMAN_DEATH_FRAMES = 16;
 constexpr unsigned char PACMAN_SPEED = 2;
 constexpr unsigned char SCREEN_RESIZE = 2;
 
@@ -39,8 +39,6 @@ constexpr unsigned short FRAME_DURATION = 16667;
 constexpr unsigned short GHOST_FLASH_START = 64;
 constexpr unsigned short LONG_SCATTER_DURATION = 512;
 constexpr unsigned short SHORT_SCATTER_DURATION = 256;
-
-
 
 enum Cell
 {

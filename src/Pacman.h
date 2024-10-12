@@ -24,7 +24,7 @@ public:
 
     void draw(bool i_victory, sf::RenderWindow& i_window);
     void reset();
-    void set_animation_timer(unsigned short i_animation_timer);
+    void set_animation_timer(unsigned short i_animation_timer, unsigned short& lives);
     void set_dead(bool i_dead);
     void set_position(short i_x, short i_y);
     void update(unsigned short i_level, std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map);
